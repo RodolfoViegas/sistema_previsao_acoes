@@ -32,12 +32,13 @@ def lambda_handler(event, context):
     
 #A API Pandas DataReader, que é interface à API alpha Vantage, recebe como parâmetros: símbolo da ação, o horário e a chave da conta, para a coleta de dados.
 
-    df = web.DataReader(event['simbolo'], 
+    df = web.DataReader('AAPL", 
                         "av-intraday", 
                         start=data_hora[0],
-                        api_key='BNYLT38LCDB0TBWF')
+                        api_key='BNYLT38LCDB0TBWF')# o símbolo AAPL é para as ações da empresa Apple, caso queira mudá-lo retreine o modelo em função da nova ação.
     
 
+   
     try:
         # O valor e data desejados são convertidos a objetos do tipo json para o envio.
         parsed = json.dumps({"data":data_hora[0] + ' ' + data_hora[1],
@@ -49,14 +50,17 @@ def lambda_handler(event, context):
         data_chave = str(datetime.datetime.strptime(data_hora[0] + ' ' + data_hora[1],"%Y-%m-%d %H:%M:%S") + datetime.timedelta(minutes=15))
         parsed= bytes(json.dumps({"data":data_chave, "preco":"sem valor"}).encode('UTF-8'))
         
-        return S3.put_object(Body=parsed,
+        S3.put_object(Body=parsed,
                             Bucket="previsoes",
                             Key=data_chave)
+        return '{"Status":"200", "preco": "sem valor"}'
 
-    print(parsed)
     
     # Existindo a dada, esta manda ao Kinesis Data Stream, este redirecionará os dados a próxima função Lambda com a rede neural para previsão.
     # O método abaixo tem parâmetros: DataStream, que é nome do Kinesis Data Stream para o qual os dados serão enviádos, Data são os dados em si e
     # PartitionKey é um valor de identificação do fluxo enviado.
-    return client.put_record(StreamName='precos_apple',
+    
+    client.put_record(StreamName='precos_apple',
                          Data=parsed, PartitionKey="part_key")
+                         
+    return '{"Status":"200","valor": "enviado a rede neural"}'

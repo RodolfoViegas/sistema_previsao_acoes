@@ -13,13 +13,15 @@ PAra os que tiverem pago a alpha vantange, modifica a string abaixo para os valo
 
 # tempo atual
 agora = datetime.datetime.now()
-# reduz um dia para coletar os valores do dia anterior (os que são disponíveis, como explicado)
-agora = agora - - datetime.timedelta(days=1)
-
-# O terá como fixos 1 minutos e 00 segundos, podendo ser modificaos para outra frequência de previsão
-agora = agora.strftime("%Y-%m-%d %H:01:00")#"%Y-%m-%d
-
-
+# Redução em dias  anteriores para captação dos que são disponíveis, como explicado.
+if agora.strftime("%A") == 'Monday':
+ # Se o dia for segunda-feira, será reduzido 3 dias para a coleta de dados da sexta-feira, já que não há pregão sábado e domingo.
+    agora = agora - datetime.timedelta(days=3)
+else:
+    # caso o dia seja de terça à sexta reduz-se 1 dia para coletar os valores do dia anterior 
+    agora = agora - datetime.timedelta(days=1)
+    
+ 
 data_hora = agora.split(' ')
 
 

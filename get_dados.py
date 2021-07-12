@@ -23,5 +23,5 @@ while condicao_de_parada !=0 :
     print(valor.content)
     
     condicao_de_parada = input('Digite 0 para sair ou qualquer outro caractere para continuar: ')
-    if condicao_de_parada == 0:
+    if condicao_de_parada == '0':
         break

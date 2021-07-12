@@ -16,8 +16,8 @@ agora = datetime.datetime.now()
 # reduz um dia para coletar os valores do dia anterior (os que são disponíveis, como explicado)
 agora = agora - - datetime.timedelta(days=1)
 
-# As horas terão como fixos 15 minutos e 00 segundos, podendo ser modificaos para outra frequência de previsão
-agora = agora.strftime("%Y-%m-%d %H:15:00")#"%Y-%m-%d
+# O terá como fixos 1 minutos e 00 segundos, podendo ser modificaos para outra frequência de previsão
+agora = agora.strftime("%Y-%m-%d %H:01:00")#"%Y-%m-%d
 
 
 data_hora = agora.split(' ')
